@@ -2,42 +2,113 @@ class CalcController{
 
 constructor(){
 
-    this._displayCalc = "0";
-    this.currentDate;
+    this._locale = 'pt-BR';
+    this._displayCalcEl = document.querySelector('#display');
+    this._dateEl = document.querySelector('#data');
+    this._timeEl = document.querySelector('#hora');
+    this._currentDate;
     this.initialize();
+    this.initButtonsEvents();
+
 
 
 }
 
 initialize(){
 
-    let displayCalcEl = document.querySelector('#display');
-    let dateEl = document.querySelector('#data');
 
-    let timeEl = document.querySelector('#hora');
+this.setDisplayDateTime();
+
+setInterval(()=>{ /** Arrow funcion, a flexa indica o que vai ser executado diretamente,
+                      ou seja, essa função vai fazer isso.
+                      Para executar algo de forma intermitente usamos o setInterval. */
+     this.setDisplayDateTime();
 
 
-    displayCalcEl.innerHTML ="4567";
-    dateEl.innerHTML = "17/10/2022";
-    timeEl.innerHTML = "20:00";
+
+}, 1000);
 
 }
 
+addEventListenerAll(element, events, fn){
+
+events.split(' ').forEach(event =>{
+
+    element.addEventListener(event, fn, false);
+
+
+});
+}
+
+initButtonsEvents(){
+
+    let buttons = document.querySelectorAll("#buttons > g, #parts > g");
+
+    buttons.forEach((btn, index)=>{ /** Com o forEach, Percorre todos os elementos dentro de buttons */
+
+        this.addEventListenerAll(btn,"click drag", e =>{
+
+            console.log(btn.className.baseVal.replace("btn-",""));  /** Replace quer dizer subistitua,ou seja, removeu o btn- na hora da impressão. */
+        });
+
+     this.addEventListenerAll(btn,"mouseover mouseup mousedown", e =>{
+
+        btn.style.cursor = "pointer";
+     })
+
+    } )
+}
+
+
+setDisplayDateTime(){
+
+    this.displayDate = this.currentDate.toLocaleDateString(this._locale,{
+        day: "2-digit",
+        month: "long",
+        year:"numeric"
+    });
+    this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
+}
+
+get displayTime(){
+
+    return this._timeEl.innerHTML;
+
+}
+
+get displayDate(){
+
+    return this._dateEl.innerHTML;
+
+
+}
+
+set displayTime(valor){
+
+    return this._timeEl.innerHTML = valor;
+}
+
+set displayDate(valor){
+
+    return this._dateEl.innerHTML = valor;
+}
+
+
+
 get displayCalc(){
-    return this._displayCalc;
+    return this._displayCalcEl.innerHTML;
 }
 
 set displayCalc(valor){
-    this._displayCalc = valor;
+    this._displayCalcEl.innerHTML = valor;
 }
 
 
-get dataAtual(){
-    return this.currentDate;
+get currentDate(){
+    return new Date();
 }
 
-set dataAtual(valor){
-    return this._dataAtual = valor;
+set currentDate(valor){
+    return this._currentDate = valor;
 }
-
 }
